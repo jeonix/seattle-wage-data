@@ -12,4 +12,4 @@ if __name__ == '__main__':
         csvFile = sys.argv[1]
         data = SeattleWageData(csvFile)
         data.separate_by_department()
-        data.get_data()
+        data.menu()

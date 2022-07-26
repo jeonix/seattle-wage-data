@@ -1,3 +1,5 @@
+from Menu import Menu
+from MenuOption import MenuOption
 
 class SeattleWageData:
     def __init__(self, csvFile=None):
@@ -43,7 +45,9 @@ class SeattleWageData:
                                        'Seattle Public Utilities': {},
                                        'City Budget Office': {},
                                        'Seattle Center': {},
-                                       'Information Technology': {}}
+                                       'Information Technology': {},
+                                       'Office of Labor Standards': {},
+                                       'Office for Civil Rights': {}}
 
         for person in self.all_employee_dict:
             if self.all_employee_dict.get(person)['Department'] == 'Police Department':
@@ -70,9 +74,13 @@ class SeattleWageData:
                 self.department_as_key_dict['Seattle Center'][person] = self.all_employee_dict.get(person)
             elif self.all_employee_dict.get(person)['Department'] == 'Information Technology':
                 self.department_as_key_dict['Information Technology'][person] = self.all_employee_dict.get(person)
+            elif self.all_employee_dict.get(person)['Department'] == 'Office of Labor Standards':
+                self.department_as_key_dict['Office of Labor Standards'][person] = self.all_employee_dict.get(person)
+            elif self.all_employee_dict.get(person)['Department'] == 'Office for Civil Rights':
+                self.department_as_key_dict['Office for Civil Rights'][person] = self.all_employee_dict.get(person)
         return self.department_as_key_dict
 
-    def get_data(self):
+    def get_wages(self):
         print("The available departments: ")
         for key in self.department_as_key_dict.keys():
             print(key)
@@ -98,20 +106,40 @@ class SeattleWageData:
                     num = float(wage.replace("'", ""))
                     wages.append(num)
             number_of_wages = len(wages)
+            largest_wage = 0
             for item in wages:
+                if item > largest_wage:
+                    largest_wage = item
                 total_wage += item
                 print(f"$ {item}")
-            median_wage = total_wage / number_of_wages
+            print()
+            if number_of_wages == 0:
+                print(f"There are {number_of_wages} wages for the {department} department")
+            else:
+                median_wage = total_wage / number_of_wages
+                print(f"{department}'s Median Wage: $ {round(median_wage, 2)}")
             print(f"The number of wages counted: {number_of_wages}")
-            print(f"{department}'s Median Wage: $ {round(median_wage, 2)}")
+            print(f"The greatest wage in {department}: $ {round(largest_wage, 2)}")
+            print()
 
     def menu(self):
+        menu = Menu("City of Seattle Wage Data Menu")
+        menu += MenuOption("W", "Look up wages for a Department")
+        menu += MenuOption('X', "Exit the program")
+        print()
         while True:
-            print("Dictionary has been initialized... ")
-            person = input("Enter a person to find (FIRST_NAME LAST_NAME): ")
-            if person in self.all_employee_dict.keys():
-                print(self.all_employee_dict.get(person))
-                return
-            else:
-                print(f"{person} not found")
-                return
+            command = menu.prompt()
+            if command.upper() == 'W':
+                self.get_wages()
+                continue
+            elif command.upper() == 'X':
+                print("Thank you for using this program")
+                break
+            # print("Dictionary has been initialized... ")
+            # person = input("Enter a person to find (FIRST_NAME LAST_NAME): ")
+            # if person in self.all_employee_dict.keys():
+            #     print(self.all_employee_dict.get(person))
+            #     return
+            # else:
+            #     print(f"{person} not found")
+            #     return
