@@ -80,6 +80,13 @@ class SeattleWageData:
                 self.department_as_key_dict['Office for Civil Rights'][person] = self.all_employee_dict.get(person)
         return self.department_as_key_dict
 
+    def find_name_all_departments(self):
+        person = input("What is the first and the last name of the person you are trying to find? ")
+        if person in self.all_employee_dict:
+            print(f"{person}'s information is {self.all_employee_dict.get(person)}")
+        else:
+            print(f"{person} was not found")
+
     def get_wages(self):
         print("The available departments: ")
         for key in self.department_as_key_dict.keys():
@@ -111,7 +118,10 @@ class SeattleWageData:
                 if item > largest_wage:
                     largest_wage = item
                 total_wage += item
-                print(f"$ {item}")
+            list_wages_command = input("Would you like to print a list of the wages? (yes/no): ")
+            if list_wages_command.lower() == 'yes':
+                for item in wages:
+                    print(f"$ {item}")
             print()
             if number_of_wages == 0:
                 print(f"There are {number_of_wages} wages for the {department} department")
@@ -125,6 +135,7 @@ class SeattleWageData:
     def menu(self):
         menu = Menu("City of Seattle Wage Data Menu")
         menu += MenuOption("W", "Look up wages for a Department")
+        menu += MenuOption('F', "View an employee's wage data")
         menu += MenuOption('X', "Exit the program")
         print()
         while True:
@@ -132,14 +143,10 @@ class SeattleWageData:
             if command.upper() == 'W':
                 self.get_wages()
                 continue
+            elif command.upper() == 'F':
+                self.find_name_all_departments()
+                continue
             elif command.upper() == 'X':
                 print("Thank you for using this program")
                 break
-            # print("Dictionary has been initialized... ")
-            # person = input("Enter a person to find (FIRST_NAME LAST_NAME): ")
-            # if person in self.all_employee_dict.keys():
-            #     print(self.all_employee_dict.get(person))
-            #     return
-            # else:
-            #     print(f"{person} not found")
-            #     return
+                
